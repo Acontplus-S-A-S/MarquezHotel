@@ -14,7 +14,7 @@ export default defineConfig({
     outDir: 'dist',
     assetsDir: 'assets',
     sourcemap: false,
-    minify: 'terser',
+    minify: 'esbuild', // Cambiado de 'terser' a 'esbuild' para mejor performance
     rollupOptions: {
       output: {
         manualChunks: {
@@ -23,10 +23,19 @@ export default defineConfig({
           icons: ['lucide-react']
         }
       }
-    }
+    },
+    // Configuración para optimizar el build
+    chunkSizeWarningLimit: 1000,
+    cssCodeSplit: true,
+    assetsInlineLimit: 4096
   },
   server: {
     port: 3000,
+    open: true,
+    host: true // Permite acceso desde la red local
+  },
+  preview: {
+    port: 4173,
     open: true
   }
 })
