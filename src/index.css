@@ -1,21 +1,77 @@
+/* ============================================
+   HOTEL EL MARQUEZ - MAIN STYLESHEET
+   Desarrollado por Acontplus S.A.S Ecuador
+   ============================================ */
+
 /* Fuentes Google - DEBE IR PRIMERO */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
+/* Tailwind CSS Imports */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Variables CSS personalizadas */
+/* ============================================
+   CSS CUSTOM PROPERTIES (Variables)
+   ============================================ */
 :root {
+  /* Colores principales */
   --primary-color: #d97706;
   --primary-hover: #b45309;
+  --primary-light: #fbbf24;
+  --primary-dark: #92400e;
+  
+  /* Colores secundarios */
   --secondary-color: #1f2937;
   --text-color: #374151;
-  --light-bg: #f9fafb;
+  --text-light: #6b7280;
+  --text-dark: #111827;
+  
+  /* Backgrounds */
+  --bg-light: #f9fafb;
+  --bg-white: #ffffff;
+  --bg-gray: #f3f4f6;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+  --gradient-light: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+  --gradient-dark: linear-gradient(135deg, #92400e 0%, #78350f 100%);
+  
+  /* Border radius */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  
+  /* Transitions */
+  --transition-fast: 0.15s ease-in-out;
+  --transition-normal: 0.3s ease-in-out;
+  --transition-slow: 0.5s ease-in-out;
+  
+  /* Z-index scale */
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal-backdrop: 1040;
+  --z-modal: 1050;
+  --z-popover: 1060;
+  --z-tooltip: 1070;
+  --z-toast: 1080;
 }
 
-/* Estilos base */
-* {
+/* ============================================
+   RESET Y BASE STYLES
+   ============================================ */
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -23,61 +79,205 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 4rem; /* Para navegación con header fijo */
 }
 
 body {
-  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   line-height: 1.6;
   color: var(--text-color);
+  background-color: var(--bg-white);
+  font-feature-settings: 'cv11', 'ss01';
+  font-variation-settings: 'opsz' 32;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
 
-/* Componentes personalizados */
+/* Mejoras de accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================
+   TIPOGRAFÍA MEJORADA
+   ============================================ */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--text-dark);
+  margin-bottom: 0.5em;
+}
+
+h1 { font-size: clamp(2rem, 5vw, 4rem); }
+h2 { font-size: clamp(1.75rem, 4vw, 3rem); }
+h3 { font-size: clamp(1.5rem, 3vw, 2.25rem); }
+h4 { font-size: clamp(1.25rem, 2.5vw, 1.875rem); }
+h5 { font-size: clamp(1.125rem, 2vw, 1.5rem); }
+h6 { font-size: clamp(1rem, 1.5vw, 1.25rem); }
+
+p {
+  margin-bottom: 1em;
+  line-height: 1.7;
+}
+
+/* Links */
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover,
+a:focus {
+  color: var(--primary-hover);
+  outline: none;
+}
+
+/* ============================================
+   COMPONENTES TAILWIND PERSONALIZADOS
+   ============================================ */
 @layer components {
+  /* Botones */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  
   .btn-primary {
-    @apply bg-yellow-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-yellow-700 transition-colors duration-200 flex items-center justify-center gap-2;
+    @apply btn bg-yellow-600 text-white hover:bg-yellow-700 focus:ring-yellow-500 shadow-md hover:shadow-lg transform hover:-translate-y-0.5;
   }
   
   .btn-secondary {
-    @apply border-2 border-yellow-600 text-yellow-600 px-6 py-3 rounded-lg font-semibold hover:bg-yellow-600 hover:text-white transition-colors duration-200;
+    @apply btn border-2 border-yellow-600 text-yellow-600 hover:bg-yellow-600 hover:text-white focus:ring-yellow-500;
   }
   
-  .section-padding {
-    @apply py-16 lg:py-20;
+  .btn-ghost {
+    @apply btn text-gray-600 hover:text-yellow-600 hover:bg-yellow-50 focus:ring-yellow-500;
   }
   
+  .btn-outline {
+    @apply btn border border-gray-300 text-gray-700 hover:bg-gray-50 focus:ring-gray-500;
+  }
+  
+  .btn-lg {
+    @apply px-8 py-4 text-lg;
+  }
+  
+  .btn-sm {
+    @apply px-4 py-2 text-xs;
+  }
+  
+  /* Cards */
+  .card {
+    @apply bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden;
+  }
+  
+  .card-hover {
+    @apply card transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
+  }
+  
+  .card-body {
+    @apply p-6;
+  }
+  
+  /* Inputs */
+  .input {
+    @apply w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-200 placeholder-gray-400;
+  }
+  
+  .input-error {
+    @apply border-red-300 focus:ring-red-500 focus:border-red-500;
+  }
+  
+  /* Container personalizado */
   .container-custom {
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }
   
+  /* Section padding */
+  .section-padding {
+    @apply py-16 lg:py-20;
+  }
+  
+  /* Text gradient */
   .text-gradient {
     @apply bg-gradient-to-r from-yellow-600 to-yellow-700 bg-clip-text text-transparent;
   }
   
-  .card-hover {
-    @apply transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
-  }
-  
+  /* Overlay oscuro */
   .overlay-dark {
     @apply absolute inset-0 bg-black/40;
   }
   
+  /* WhatsApp flotante */
   .floating-whatsapp {
     @apply fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-lg hover:bg-green-600 hover:scale-110 transition-all duration-300 z-50;
   }
+  
+  /* Loading spinner */
+  .spinner {
+    @apply animate-spin rounded-full border-b-2 border-current;
+  }
+  
+  /* Badge */
+  .badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium;
+  }
+  
+  .badge-primary {
+    @apply badge bg-yellow-100 text-yellow-800;
+  }
+  
+  .badge-success {
+    @apply badge bg-green-100 text-green-800;
+  }
+  
+  .badge-warning {
+    @apply badge bg-orange-100 text-orange-800;
+  }
+  
+  .badge-error {
+    @apply badge bg-red-100 text-red-800;
+  }
 }
 
-/* Utilidades personalizadas */
+/* ============================================
+   UTILIDADES PERSONALIZADAS
+   ============================================ */
 @layer utilities {
+  /* Backdrop blur personalizado */
   .backdrop-blur-custom {
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
   }
   
+  /* Text shadow */
   .text-shadow {
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   }
   
+  .text-shadow-lg {
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  }
+  
+  /* Box shadow personalizadas */
+  .shadow-hotel {
+    box-shadow: 0 10px 15px -3px rgba(217, 119, 6, 0.1), 0 4px 6px -2px rgba(217, 119, 6, 0.05);
+  }
+  
+  .shadow-hotel-lg {
+    box-shadow: 0 20px 25px -5px rgba(217, 119, 6, 0.1), 0 10px 10px -5px rgba(217, 119, 6, 0.04);
+  }
+  
+  /* Background image con overlay */
   .bg-image-overlay {
     position: relative;
   }
@@ -97,10 +297,63 @@ body {
     position: relative;
     z-index: 2;
   }
+  
+  /* Truncate text */
+  .truncate-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .truncate-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  /* Aspect ratios */
+  .aspect-hotel {
+    aspect-ratio: 16 / 10;
+  }
+  
+  .aspect-room {
+    aspect-ratio: 4 / 3;
+  }
+  
+  /* Glass effect */
+  .glass {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .glass-dark {
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
 }
 
-/* Animaciones personalizadas */
-@keyframes slideInUp {
+/* ============================================
+   ANIMACIONES PERSONALIZADAS
+   ============================================ */
+
+/* Fade in */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Slide up */
+@keyframes slideUp {
   from {
     opacity: 0;
     transform: translateY(30px);
@@ -111,10 +364,35 @@ body {
   }
 }
 
-@keyframes fadeInScale {
+/* Slide in from left */
+@keyframes slideInLeft {
   from {
     opacity: 0;
-    transform: scale(0.95);
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Slide in from right */
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Scale in */
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
   }
   to {
     opacity: 1;
@@ -122,6 +400,7 @@ body {
   }
 }
 
+/* Float animation */
 @keyframes float {
   0%, 100% {
     transform: translateY(0px);
@@ -131,54 +410,254 @@ body {
   }
 }
 
-.animate-slide-in-up {
-  animation: slideInUp 0.6s ease-out;
+/* Pulse glow */
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(217, 119, 6, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(217, 119, 6, 0.8);
+  }
 }
 
-.animate-fade-in-scale {
-  animation: fadeInScale 0.5s ease-out;
+/* Clases de animación */
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.6s ease-out forwards;
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.6s ease-out forwards;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.6s ease-out forwards;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.5s ease-out forwards;
 }
 
 .animate-float {
   animation: float 3s ease-in-out infinite;
 }
 
-/* Scrollbar personalizado */
+.animate-pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+/* ============================================
+   SCROLLBAR PERSONALIZADO
+   ============================================ */
 ::-webkit-scrollbar {
   width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #d97706;
+  background: #f1f5f9;
   border-radius: 4px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #b45309;
+::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 4px;
+  transition: background var(--transition-fast);
 }
 
-/* Responsive helpers */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-hover);
+}
+
+/* Para Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-color) #f1f5f9;
+}
+
+/* ============================================
+   FOCUS Y ACCESIBILIDAD
+   ============================================ */
+.focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* Skip to content link */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: var(--primary-color);
+  color: white;
+  padding: 8px;
+  text-decoration: none;
+  border-radius: 4px;
+  z-index: 9999;
+}
+
+.skip-link:focus {
+  top: 6px;
+}
+
+/* ============================================
+   RESPONSIVE HELPERS
+   ============================================ */
 @media (max-width: 768px) {
   .section-padding {
     @apply py-12;
   }
   
-  .text-5xl {
-    @apply text-4xl;
-  }
+  h1 { font-size: 2.5rem; }
+  h2 { font-size: 2rem; }
+  h3 { font-size: 1.75rem; }
   
-  .text-7xl {
-    @apply text-5xl;
+  .btn-lg {
+    @apply px-6 py-3 text-base;
   }
 }
 
-/* Print styles */
+@media (max-width: 640px) {
+  .container-custom {
+    @apply px-4;
+  }
+  
+  .card-body {
+    @apply p-4;
+  }
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
 @media print {
-  .floating-whatsapp {
+  .floating-whatsapp,
+  .sticky,
+  .fixed,
+  button,
+  .no-print {
     display: none !important;
   }
+  
+  body {
+    font-size: 12pt;
+    line-height: 1.4;
+    color: black;
+    background: white;
+  }
+  
+  a {
+    color: black;
+    text-decoration: underline;
+  }
+  
+  .card {
+    border: 1px solid #ccc;
+    box-shadow: none;
+  }
+}
+
+/* ============================================
+   DARK MODE SUPPORT (Preparado para futuro)
+   ============================================ */
+@media (prefers-color-scheme: dark) {
+  /* Comentado para uso futuro */
+  /*
+  :root {
+    --bg-white: #1f2937;
+    --text-color: #f9fafb;
+    --text-dark: #ffffff;
+    --bg-light: #374151;
+  }
+  */
+}
+
+/* ============================================
+   LOADING STATES
+   ============================================ */
+.loading-skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* ============================================
+   PERFORMANCE OPTIMIZATIONS
+   ============================================ */
+.gpu-accelerated {
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* ============================================
+   HOTEL SPECIFIC STYLES
+   ============================================ */
+.hero-gradient {
+  background: linear-gradient(135deg, 
+    rgba(217, 119, 6, 0.9) 0%, 
+    rgba(180, 83, 9, 0.9) 50%, 
+    rgba(146, 64, 14, 0.9) 100%);
+}
+
+.room-card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.room-card-hover:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.testimonial-quote::before {
+  content: '"';
+  font-size: 4rem;
+  color: var(--primary-color);
+  opacity: 0.3;
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  font-family: Georgia, serif;
+}
+
+/* Estilos específicos para el mapa */
+.map-container {
+  filter: grayscale(20%);
+  transition: filter 0.3s ease;
+}
+
+.map-container:hover {
+  filter: grayscale(0%);
+}
+
+/* ============================================
+   FINAL CLEANUP
+   ============================================ */
+/* Ocultar elementos que no se usan pero pueden aparecer */
+.hidden {
+  display: none !important;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
